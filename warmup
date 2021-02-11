@@ -1,0 +1,61 @@
+
+//dff morning warmup
+module dff(clk,rst,d,outp);
+  input wire clk,rst,d;
+  output reg outp;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      outp<=0;
+    end
+    else begin
+      outp<=d;
+    end
+  end
+endmodule
+
+//just for fun morning
+module halfadder(a,b,clk,rst,sum,carry);
+  input wire a,b,clk,rst;
+  output reg sum, carry;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      sum<=0;
+      carry<=0;
+    end
+    else begin
+      sum<=a+b;
+      carry<=a&b;
+    end
+  end
+endmodule
+
+//warmup last one simple alu
+module alu(a,b,clk,rst,sel,outp);
+  input wire a,b,clk,rst;
+  input wire [1:0] sel;
+  output reg [1:0] outp;
+  
+  always@ (posedge clk) begin
+    if (!rst) begin
+    	outp<=0;
+    end
+    else begin
+      case (sel) 
+        2'b00:
+        	outp<=a+b;
+        2'b01:
+            outp<=a-b;
+        2'b10:
+          	outp<=a*b;
+        2'b11:
+          	outp<=a/b;
+        default:
+            outp<=0;
+      endcase
+    end
+  end
+endmodule
+  
+  
