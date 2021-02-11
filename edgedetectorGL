@@ -1,0 +1,20 @@
+
+module edgedetect(D,rst,clk,tggle,ri,fa,outp,Q);
+  input D,rst,clk;
+  output reg outp, Q;
+  output reg tggle, ri,fa;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      Q<=0;
+    end
+    else begin 
+      Q<=D;
+    end
+    
+    assign tggle = Q^D;
+    assign ri = (~ Q) & D;
+    assign fa = (~ D) & Q;
+  end
+endmodule
+  
