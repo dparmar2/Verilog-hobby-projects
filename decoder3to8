@@ -1,0 +1,205 @@
+//By Divyesh Mahesh Parmar
+module Decoder_GL(Y7,Y6,Y5,Y4,Y3,Y2,Y1,Y0,A,B,C,En);
+  input A,B,C,En;
+  output Y7,Y6,Y5,Y4,Y3,Y2,Y1,Y0;
+  
+  wire ab,bb,cb;
+
+	INV_GT oo1(ab,A);
+	INV_GT oo2(bb,B);
+	INV_GT oo3(cb,C);
+	
+	and4 oo4(Y0,En,ab,bb,cb);
+	and4 oo5(Y1,En,ab,bb,C);
+	and4 oo6(Y2,En,ab,B,cb);
+	and4 oo7(Y3,En,ab,B,C);
+	and4 oo8(Y4,En,A,bb,cb);
+	and4 oo9(Y5,En,A,bb,C);
+	and4 oo10(Y6,En,A,B,cb);
+	and4 oo11(Y7,En,A,B,B);
+  
+endmodule
+
+// Code your design here
+module and4(L1,P1,Q1,R1,S1);
+  input P1,Q1,R1,S1;
+  output L1;
+  wire l1,l2;
+  and1 la(l1,P1,Q1);
+  and1 lb(l2,R1,S1);
+  and1 lc(L1,l1,l2);
+  
+endmodule
+
+module and1(otp,in1,in2); 
+  output otp;
+  input in1,in2;
+  wire otp1;
+  
+  NAND2_GT i101(otp1,in1,in2);
+  INV_GT i202(otp,otp1);
+  
+endmodule
+
+module or1(outp,in3,in4);
+  output outp;
+  input in3,in4;
+  wire otp2;
+  
+  NOR2_GT i10101(otp2,in3,in4);
+  INV_GT i20202(outp,otp2);
+  
+endmodule
+
+
+module FA_GT ( CO, S, A, B, CI );
+   output CO, S;
+   input  A, B, CI;
+
+   wire   n0;
+   wire   n1;
+   wire   n2;
+   
+   xor #(12) xor00( S, A, B, CI);
+
+   and I0(n0,  A,  B);   
+   and I1(n1,  B, CI);
+   and I2(n2, CI,  A);
+   
+   nor #(10) I3(CO, n0, n1, n2);
+   
+endmodule
+
+module INV_GT
+  (
+   Y, A
+   );
+   output Y;
+   input  A;
+   
+   not #(4) I0(Y,A);
+   
+endmodule
+
+module TRI_GT
+  (
+   Y, A, E, Eb
+   );
+  output Y;
+  input E;
+  input Eb;
+  input A;
+   
+  notif0 #(6) (Y, A, Eb);
+  notif1 #(6) (Y, A,  E);
+ 
+endmodule
+
+module NAND2_GT
+  (
+   Y, A, B
+   );
+   output Y;
+   input  A;
+   input  B;
+   
+   nand #(4) (Y, A, B);
+endmodule
+
+module NOR2_GT
+  (
+   Y, A, B
+   );
+   output Y;
+   input  A;
+   input  B;
+
+   nor #(4) (Y, A, B);
+endmodule
+
+module AOI21_GT
+  (
+   Y, A0, A1, B0
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   wire   outA ;
+
+   and I0(outA, A0, A1);
+   nor #(8) I1(Y, B0, outA);
+
+endmodule
+
+module AOI22_GT
+  (
+   Y, A0, A1, B0, B1
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   input  B1;
+
+   wire   outA ;
+   wire   outB ;
+
+
+   and I0(outA, A0, A1);
+   and I1(outB, B0, B1);
+   nor #(8) I2(Y, outA, outB);
+
+endmodule
+
+module OAI21_GT
+  (
+   Y, A0, A1, B0
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   wire   outA ;
+
+   or I0(outA, A0, A1);
+   nand #(7) I1(Y, B0, outA);
+
+endmodule
+
+module OAI22_GT
+  (
+   Y, A0, A1, B0, B1
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   input  B1;
+
+   wire   outA ;
+   wire   outB ;
+
+
+   or I0(outA, A0, A1);
+   or I1(outB, B0, B1);
+   nand #(8) I2(Y, outA, outB);
+
+endmodule
+
+module XOR2_GT
+  (
+   Y, A, B
+   );
+   
+  output Y;
+  input  A;
+  input  B;
+
+  xor #(12) I5(Y, A, B);
+
+endmodule
