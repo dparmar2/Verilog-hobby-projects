@@ -1,0 +1,211 @@
+// Code your design here
+////////////////////////////////////////////////////////////////////////
+// PRIENC8_GL.v  
+//By Divyesh Mahesh Parmar
+module PRIENC8_GL
+   #( parameter int bW=8 )
+   ( input  wire [bW-1:0] A,
+     output wire [bW-1:0] Y  );
+  
+  and1 a1(Y[7],A[7],1'b1);
+  INV_GT a2(n0,Y[7]);
+  and1 a3(Y[6],A[6],n0);
+  or1 a4(n1,Y[6],Y[7]);
+  INV_GT a5(n2,n1);
+  and1 a6(Y[5],A[5],n2);
+  or1 a7(n3,Y[5],n1);
+  INV_GT a8(n4,n3);
+  and1 a9(Y[4],n4,A[4]);
+  or1 a10(n5,n3,Y[5]);
+  INV_GT a11(n6,n5);
+  and1 a12(Y[3],A[3],n6);
+  or1 a13(n7,Y[3],n5);
+  INV_GT a14(n8,n7);
+  and1 a15(Y[2],A[2],n8);
+  INV_GT a16(n9,n7);
+  and1 a17(Y[1],A[1],n9);
+  or1 a18(n10,n7,Y[1]);
+  INV_GT a19(n11,n10);
+  and1 a20(Y[0],A[0],n11);
+ 
+endmodule
+
+
+/////////////////////////////////////////////
+//
+// Models for generic gates
+//
+/////////////////////////////////////////////
+
+module and1(otp,in1,in2); 
+  output outp;
+  input in1,in2;
+  wire otp1;
+  
+  NAND2_GT i101(otp1,in1,in2);
+  INV_GT i202(otp,otp1);
+  
+endmodule
+
+module or1(outp,in3,in4);
+  output outp;
+  input in3,in4;
+  wire otp2;
+  
+  NOR2_GT i10101(otp2,in3,in4);
+  INV_GT i20202(outp,otp2);
+  
+endmodule
+
+
+module FA_GT ( CO, S, A, B, CI );
+   output CO, S;
+   input  A, B, CI;
+
+   wire   n0;
+   wire   n1;
+   wire   n2;
+   
+   xor #(12) xor00( S, A, B, CI);
+
+   and I0(n0,  A,  B);   
+   and I1(n1,  B, CI);
+   and I2(n2, CI,  A);
+   
+   nor #(10) I3(CO, n0, n1, n2);
+   
+endmodule
+
+module INV_GT
+  (
+   Y, A
+   );
+   output Y;
+   input  A;
+   
+   not #(4) I0(Y,A);
+   
+endmodule
+
+module TRI_GT
+  (
+   Y, A, E, Eb
+   );
+  output Y;
+  input E;
+  input Eb;
+  input A;
+   
+  notif0 #(6) (Y, A, Eb);
+  notif1 #(6) (Y, A,  E);
+ 
+endmodule
+
+module NAND2_GT
+  (
+   Y, A, B
+   );
+   output Y;
+   input  A;
+   input  B;
+   
+   nand #(4) (Y, A, B);
+endmodule
+
+module NOR2_GT
+  (
+   Y, A, B
+   );
+   output Y;
+   input  A;
+   input  B;
+
+   nor #(4) (Y, A, B);
+endmodule
+
+module AOI21_GT
+  (
+   Y, A0, A1, B0
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   wire   outA ;
+
+   and I0(outA, A0, A1);
+   nor #(8) I1(Y, B0, outA);
+
+endmodule
+
+module AOI22_GT
+  (
+   Y, A0, A1, B0, B1
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   input  B1;
+
+   wire   outA ;
+   wire   outB ;
+
+
+   and I0(outA, A0, A1);
+   and I1(outB, B0, B1);
+   nor #(8) I2(Y, outA, outB);
+
+endmodule
+
+module OAI21_GT
+  (
+   Y, A0, A1, B0
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   wire   outA ;
+
+   or I0(outA, A0, A1);
+   nand #(7) I1(Y, B0, outA);
+
+endmodule
+
+module OAI22_GT
+  (
+   Y, A0, A1, B0, B1
+   );
+
+   output Y;
+   input  A0;
+   input  A1;
+   input  B0;
+   input  B1;
+
+   wire   outA ;
+   wire   outB ;
+
+
+   or I0(outA, A0, A1);
+   or I1(outB, B0, B1);
+   nand #(8) I2(Y, outA, outB);
+
+endmodule
+
+module XOR2_GT
+  (
+   Y, A, B
+   );
+   
+  output Y;
+  input  A;
+  input  B;
+
+  xor #(12) I5(Y, A, B);
+
+endmodule
