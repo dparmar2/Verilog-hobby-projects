@@ -1,0 +1,25 @@
+// Fibonacci
+module fibonacci(clk, rst, fib_out);
+  input clk, rst;
+  output reg [15:0] fib_out;
+  
+  reg [15:0] curr_v;
+  reg [15:0] prev_v;
+  
+  always @(posedge clk or negedge rst) begin
+    if (!rst) begin
+      curr_v <= 16'd0;
+      prev_v <= 16'd1;
+    end
+  	
+    else begin
+      prev_v <= curr_v;
+      curr_v <= curr_v + prev_v; 
+      fib_out <= curr_v; //you can also take fib_out<=prev_v but it will be 1 clk cycle delay
+    end
+  
+  end
+  
+  //assign fib_out = prev_v; //if you wanna use this, then remove reg from output declaration
+
+endmodule
