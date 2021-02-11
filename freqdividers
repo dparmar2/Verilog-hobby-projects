@@ -1,0 +1,106 @@
+// Code your design here
+module freqdiv2 (clk,rst,clkout);
+  input clk,rst;
+  output reg clkout;
+  
+  always @ (posedge clk) begin
+    if(!rst) begin
+      clkout <= 0;
+    end
+    else begin
+      clkout <= ~ clkout;
+    end
+  end
+endmodule
+
+
+//DIVIDE BY 3!!!!!!!! Not 50% duty cycle
+module freqdiv3 (clk,rst,clkout,clkdiv3);
+  input clk,rst;
+  output reg clkdiv3;
+  output reg [2:0] clkout;
+  
+  
+  
+  always@(posedge clk) begin
+    if(!rst) begin
+      clkout <= 3'd0;
+    end
+    else begin
+      if (clkout == 3'b010) begin
+        clkout <= 0;
+      end
+      else begin
+        clkout <= clkout+1;
+      end
+    end
+    clkdiv3 <= clkout[1];
+  end
+endmodule
+
+//Divide by 3 D.C = 50% 
+//mod 3 counter & a fliplop & or gate pair to get 50% dc.
+module freqdiv3n (clk,rst,clkout,clkdiv3,finaloutp);
+  input clk,rst;
+  output reg clkdiv3;
+  output reg [2:0] clkout;
+  output finaloutp;
+  
+  reg q3;
+  
+  always@(posedge clk) begin
+    if(!rst) begin
+      clkout <= 3'd0;
+    end
+    else begin
+      if (clkout == 3'b010) begin
+        clkout <= 0;
+      end
+      else begin
+        clkout <= clkout+1;
+      end
+    end
+    clkdiv3 <= clkout[1];
+  end
+  
+  always @(negedge clk) begin
+    if (!rst) begin
+      q3 <= 0;
+    end
+    else begin
+      q3 <= clkdiv3;
+    end
+  end
+  
+   assign finaloutp = q3 || clkdiv3; //bitwise OR please!!
+endmodule
+
+module freqdiv4 (clk,rst,d0,d1,q0,q1);
+  input clk,rst,d0,d1;
+  output reg q0,q1;
+  
+  //assign d0 = ~ q0;
+  //assign d1 = ~ q1;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      q0 <= 0;
+    end
+    else begin
+      q0 <= ~ q0;     
+    end
+  end
+  
+  always @(posedge clk,posedge q0) begin //dont know why but with only q0 not working and q1=HI-Z, so had to put clk with q0 in sensitivity list
+    if (!rst) begin
+      q1 <= 0;
+    end
+    else begin
+      q1 <= ~ q1;
+    end
+  end
+endmodule
+    
+    
+    
+  
