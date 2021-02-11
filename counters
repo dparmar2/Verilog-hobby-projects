@@ -1,0 +1,53 @@
+// UP Counter
+module upcounter (clk,rst,countsa);
+  //input [3:0] da;   //don't need input da, so can ignore it
+  input clk, rst;
+  output reg [3:0] countsa;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      countsa <= 4'd0;
+    end
+    else
+      countsa <= countsa + 1;
+  end
+endmodule
+
+
+//DOWN Counter
+module downcounter(clk,rst,countsb);
+  //input [3:0] db;
+  input clk,rst;
+  output reg [3:0] countsb;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      countsb<=4'd15;
+    end
+    else begin
+	  countsb <= countsb - 1;
+    end
+    
+  end
+endmodule
+
+
+module updowncounter(clk,rst,updown,countsc);
+  input clk,rst,updown;
+  output reg [3:0] countsc;
+  
+  //integer direction;
+  
+  always @(posedge clk) begin
+    if(!rst) begin
+      countsc <= 4'd0;
+    end
+    else if(updown) begin
+      countsc <= countsc + 1 ;
+    end
+    else begin
+    	countsc <= countsc - 1 ;
+    end 	
+  end
+ endmodule
+  
